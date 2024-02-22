@@ -1,3 +1,4 @@
+import { Box } from "@mui/material"
 import ShopElement from "./ShopElement"
 import { getProducts, Product } from "./handleProducts"
 import { useLoaderData } from "react-router-dom"
@@ -13,10 +14,14 @@ export default function Shop() {
 
 
   return (
-    <>
-      <h1>Awesome Shop</h1>
+    <Box sx={{width: "100%"}}>
+      <div className="header-image">
+        <h1>My Awesome Shop</h1>
+      </div>
+
+
       <ShopElement products={products}/>
-    </>
+    </Box>
 
 
   )

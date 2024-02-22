@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +12,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Icon from '@mdi/react';
+import { mdiCartOutline } from '@mdi/js';
 import { Link, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Product } from './handleProducts';
 
 interface Props {
 
@@ -22,9 +25,23 @@ interface Props {
 
 const drawerWidth = 240;
 
-export default function DrawerAppBar(props: Props) {
+export default function RootElement(props: Props) {
+  const [productsInCart, setProductsInCart] = useState<Product[]>([])
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  useEffect(() => {
+    const countTotal = () => {
+      let newCount = 0;
+      productsInCart.map(product => {
+        newCount += product.counter
+      })
+      setTotalProducts(newCount);
+    }
+    countTotal()
+  }, [productsInCart])
+
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -49,7 +66,7 @@ export default function DrawerAppBar(props: Props) {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary="Contact" />
+              <Icon path={mdiCartOutline} size={1} />
             </ListItemButton>
           </ListItem>
       </List>
@@ -90,9 +107,13 @@ export default function DrawerAppBar(props: Props) {
                     Shop
                 </Button>
             </Link>
-                <Button sx={{ color: '#fff' }}>
-                    Contact
-                </Button>
+            <Link to={"/shoppingCart"}>
+              
+              <div className="cart">
+                {(productsInCart.length >= 1) && <span className="count">{totalProducts}</span>}
+                <Icon path={mdiCartOutline} size={1.5} style={{color: "#fff"}} className='material-icons'/>
+              </div>
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>
@@ -115,7 +136,7 @@ export default function DrawerAppBar(props: Props) {
       </nav>
       <Box component="main" sx={{ p: 3 }}>
         <Toolbar />
-        <div id='content'>{<Outlet/>}</div>
+        <div id='content'>{<Outlet context={[productsInCart, setProductsInCart]}/>}</div>
       </Box>
     </Box>
   );

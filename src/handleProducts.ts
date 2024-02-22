@@ -8,6 +8,7 @@ export type Product = {
     image: string,
     price: number,
     rating: {count: number, rate: number}
+    counter: number
 }
 
 let fakeCache: {[key: string]: boolean} = {};
@@ -29,8 +30,8 @@ export async function getProducts() {
     await fakeDelay(`getProducts`);
     
     const products: Product[] = await fetch('https://fakestoreapi.com/products?limit=5')
-    .then(res=>res.json())
-
+    .then(res=>res.json());
+    
     return products
 }
 
@@ -38,7 +39,8 @@ export async function getSingleProduct(id: number) {
     await fakeDelay(`getSingleProduct`);
 
     const product: Product = await fetch(`https://fakestoreapi.com/products/${id.toString()}`)
-    .then(res=>res.json())
+    .then(res=>res.json());
+
 
     return product
 }
