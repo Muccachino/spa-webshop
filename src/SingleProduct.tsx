@@ -1,6 +1,6 @@
 import { useLoaderData, useOutletContext, Link } from "react-router-dom";
 import { Product, getSingleProduct } from "./handleProducts";
-import { Button } from "@mui/material";
+import { Box, Button, Grid, Rating, Typography } from "@mui/material";
 
 export async function loader({params}: { params: { id: number}}) {
     const product = await getSingleProduct(params.id);
@@ -29,17 +29,36 @@ export default function SingleProduct() {
  
     return(
       <>
-        <div className="product-card" key={product.title}>
-          <h1>Single Product</h1>
-          <img src={product.image} height={250}/>
-          <h3>{product.title}</h3>
-          <p>€ {Number(product.price).toFixed(2)}</p>
-          <Button onClick={() => addToCart(product)}>Add to Card</Button>
-        </div>
-        <Link to={"/shop"}>
-          <Button>Back</Button>
-        </Link>
-          
+        <Box sx={{ width: "80%", margin: "100px 10%"}}>
+          <Link to={"/shop"}>
+            <Button sx={{marginBottom: "50px"}} variant="outlined">Back</Button>
+          </Link>
+          <Grid container>
+            <Grid item xs={3}>
+              <img src={product.image} height={400}/>
+            </Grid>
+            <Grid item xs={7} sx={{padding: "20px", marginLeft: "50px"}}>
+              <Typography sx={{marginBottom:"15px"}} variant="h4">{product.title}</Typography>
+              <div style={{display: "flex", marginBottom: "20px"}}>
+                <Rating name="read-only" value={product.rating.rate} readOnly></Rating>
+                <Typography
+                  variant="body2"
+                  component="span"
+                  sx={{ color: "#808080" }}
+                >
+                  ({product.rating.count} total votes)
+                </Typography>
+              </div>
+              <Typography sx={{marginBottom:"30px"}} variant="body1">{product.description}</Typography>
+              <Typography variant="h6" sx={{textAlign: "end"}}>€ {Number(product.price).toFixed(2)}</Typography>
+              <Button sx={{marginTop:"100px"}} variant="contained" onClick={() => addToCart(product)}>Add to Card</Button>
+
+
+            </Grid>
+
+          </Grid>
+
+        </Box>
       </>
 
     )

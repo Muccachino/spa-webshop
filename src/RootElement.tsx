@@ -13,10 +13,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Icon from '@mdi/react';
-import { mdiCartOutline } from '@mdi/js';
+import { mdiCartOutline,  mdiFacebook, mdiInstagram, mdiTwitter } from '@mdi/js';
 import { Link, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Product } from './handleProducts';
+import { Product, fakeDelay } from './handleProducts';
 
 interface Props {
 
@@ -28,6 +28,8 @@ const drawerWidth = 240;
 export default function RootElement(props: Props) {
   const [productsInCart, setProductsInCart] = useState<Product[]>([])
   const [totalProducts, setTotalProducts] = useState(0);
+  const [homeVisible, setHomeVisible] = useState(true)
+
 
   useEffect(() => {
     const countTotal = () => {
@@ -46,6 +48,11 @@ export default function RootElement(props: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  const handleHomeVisibility = async () => {
+    await fakeDelay()
+    setHomeVisible(prevVisible => prevVisible = !prevVisible)
+  }
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -76,6 +83,13 @@ export default function RootElement(props: Props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
+    <>
+    <Box sx={{
+      display: "flex",
+      minHeight: "100vh",
+      flexDirection: "column",
+      justifyContent: "flex-start"
+      }}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar component="nav">
@@ -96,18 +110,18 @@ export default function RootElement(props: Props) {
           >
             Awesome Shop
           </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <Box sx={{ display: "flex", width:"300px", justifyContent: "space-around" }}>
             <Link to={"/"}>
-                <Button sx={{ color: '#fff' }}>
+                <Button onClick={() => setHomeVisible(true)} sx={{ color: '#fff', fontSize: "1.2rem" }}>
                     Home
                 </Button>
             </Link>
             <Link to={"/shop"}>
-                <Button sx={{ color: '#fff' }}>
+                <Button onClick={() => setHomeVisible(false)} sx={{ color: '#fff', fontSize: "1.2rem" }}>
                     Shop
                 </Button>
             </Link>
-            <Link to={"/shoppingCart"}>
+            <Link to={"/shoppingCart"} onClick={() => setHomeVisible(false)}>
               
               <div className="cart">
                 {(productsInCart.length >= 1) && <span className="count">{totalProducts}</span>}
@@ -134,10 +148,34 @@ export default function RootElement(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main">
         <Toolbar />
-        <div id='content'>{<Outlet context={[productsInCart, setProductsInCart]}/>}</div>
       </Box>
     </Box>
+    {homeVisible && 
+      <div id='home-page'>
+        <h1 id='home-header'> Welcome to Awesome Shop</h1>  
+        <Link to={"/shop"}>
+          <Button variant='contained' onClick={() => handleHomeVisibility()}>Shop</Button>
+        </Link>
+      </div>}
+    <div id='content'>{<Outlet context={[productsInCart, setProductsInCart]}/>}</div>
+
+    <footer id='footer'>
+      <div id='terms-of-use'>
+        <span>
+          <a href="#">Privacy Policy</a>
+          <span> | </span>
+          <a href="#">Terms of Use</a>
+        </span>
+      </div>
+      <div id='social-media'>
+        <Icon className='social-icon' color={"#fff"} path={mdiFacebook} size={1}/>
+        <Icon color={"#fff"} path={mdiInstagram} size={1}/>
+        <Icon color={"#fff"} path={mdiTwitter} size={1}/>
+      </div>
+    </footer>
+    </Box>
+    </>
   );
 }

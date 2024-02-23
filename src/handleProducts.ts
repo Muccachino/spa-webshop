@@ -1,4 +1,4 @@
-
+import { matchSorter } from "match-sorter";
 
 export type Product = {
     id: number,
@@ -26,12 +26,14 @@ export function fakeDelay(key?: string) {
     })
 }
 
-export async function getProducts() {
+export async function getProducts(query?: string) {
     await fakeDelay(`getProducts`);
     
-    const products: Product[] = await fetch('https://fakestoreapi.com/products?limit=5')
+    const products: Product[] = await fetch('https://fakestoreapi.com/products?limit=12')
     .then(res=>res.json());
     
+    if(query) return matchSorter(products, query, {keys: ["title"]})
+
     return products
 }
 

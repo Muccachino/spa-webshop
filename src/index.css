@@ -4,18 +4,33 @@
   font-family: "Roboto";
 }
 
+#home-page {
+  background: url(https://shopping-cart-six-lac.vercel.app/background.jpg) no-repeat center/cover;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
 #content {
   width: 100%;
 }
 
 .product-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  justify-items: center;
   margin-bottom: 20px;
+  padding: 20px;
 }
 
 .cart {
   position: relative;
   display: block;
-  width: 28px;
+  width: 35px;
   height: 28px;
   height: auto;
   overflow: hidden;
@@ -28,7 +43,8 @@
   }
   .count {
     position: absolute;
-    top: 0;
+    top: 22px;
+    left: 18px;
     right: 0;
     z-index: 2;
     font-size: 11px;
@@ -53,20 +69,19 @@
 
 .header-image {
   width: 100%;
-  height: 200px;
-  position: relative;
+  height: 300px;
   text-align: center;
   color: white;
   background: url(https://shopping-cart-six-lac.vercel.app/background.jpg) no-repeat center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    #header-text {
+      font-size: 3rem;
+      font-weight: bold;
+    };
 };
-.headerText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50% -50%);
-  font-size: 2rem;
-  font-weight: bold;
-};
+
 .productCard {
   max-width: 300px;
 };
@@ -74,3 +89,30 @@
   height: 300px;
   padding-top: 56.25%;
 };
+
+#total-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5%;
+  background-color: #1976d2;
+  height: 120px;
+  align-items: center;
+  #terms-of-use {
+    color: white;
+    a {
+      text-decoration: none;
+      color: white;
+    }    
+  }
+  #social-media {
+    width: 100px;
+    display: flex;
+    justify-content: space-around;
+  }
+}

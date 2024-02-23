@@ -12,11 +12,11 @@ export default function ShopElement({products}: Props) {
 
   const addToCart = (product: Product) => {
 
-    const inCart = productsInCart.find(product => product.title === product.title)
+    const inCart = productsInCart.find(item => item.title === product.title)
 
     if(inCart) {
-      const updatedCart = productsInCart.map(product =>
-        product.title === product.title ? {...product, counter: product.counter +1}: product);
+      const updatedCart = productsInCart.map(item =>
+        item.title === product.title ? {...item, counter: item.counter +1}: item);
 
       setProductsInCart(updatedCart);
     } else {
@@ -31,29 +31,28 @@ export default function ShopElement({products}: Props) {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    height: "100%", //"fit-content",
+    height: "100%",
+    width: "350px"
   };
   const sxParagraph = {
     mt: 2,
     mb: 2,
   };
   
-  const sxPrice = {
-    display: "block",
-  };
 
   return (
-    products.map(product => {
+    <Grid container spacing={2} sx={{padding: "50px 10%"}}>
+      {products.map(product => {
       return(
-        <Grid key={product.id} item xs={12} sm={6} md={3} zeroMinWidth>
+        <Grid key={product.id} item xs={12} sm={6} md={3} zeroMinWidth >
         <Paper elevation={4} sx={sx(sxCard)}>
           <Link
-            to={`${product.id}`}
+            to={`/shop/${product.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             {" "}
-            <div>
-              <img src={product.image} alt={product.title} width={300}/>
+            <div style={{textAlign: "center"}}>
+              <img src={product.image} alt={product.title} width={200}/>
               <Typography
                 sx={sx(sxParagraph)}
                 variant="subtitle1"
@@ -61,22 +60,23 @@ export default function ShopElement({products}: Props) {
               >
                 {product.title}
               </Typography>
-              <Typography
-                sx={sx(sxPrice)}
-                variant="h6"
-                component="span"
-              >
-                € {product.price}
-              </Typography>
+
             </div>
           </Link>
           <div
-            style={{ display: "flex", justifyContent: "flex-end" }}
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
           >
+            <Typography
+                sx={{alignSelf: "center"}}
+                variant="h6"
+                component="span"
+              >
+                € {Number(product.price).toFixed(2)}
+            </Typography>
             <Button
-              sx={{ mt: 2, mx: 0, justifyContent: "flex-end" }}
+              sx={{ mx: 0}}
               variant="contained"
-              onClick={() => addToCart}
+              onClick={() => addToCart(product)}
             >
               Add to Cart
             </Button>
@@ -84,7 +84,9 @@ export default function ShopElement({products}: Props) {
         </Paper>
       </Grid>
       )
-    })
+    })}
+    </Grid>
+    
 
   )
 }
